@@ -15,7 +15,7 @@ form.onsubmit = (e) => { // отправляет
     let fm = new FormData(form)
 
     let todo = {
-        id: Math.random(),
+        id: String(Math.random()),
         title: fm.get('task'),
         isDone: false,
         time: new Date().toLocaleTimeString('uz-UZ', { hour12: false }) // он берет время
@@ -75,10 +75,10 @@ function reload(arr, place) {
 
         // functions
         remove_btn.onclick = () => {
-            fetch('http://localhost:9000/users/' + item.id), {
-                method: "DELETE"
-            }
-            
+            fetch('http://localhost:9000/users/' + item.id, {
+                method: "delete"
+            }).then(res => res.json()).then(res => console.log(res))
+
             let isSure = confirm('Are you sure ?')
 
             if (isSure) {
@@ -89,7 +89,19 @@ function reload(arr, place) {
         }
 
         todo.ondblclick = () => {
-            let newTitle = prompt('Write new title')
+            let newTitle = prompt('Write new title ' + item.title)
+            let newTime = new Date().toLocaleTimeString('uz-UZ', { hour12: false })
+
+            fetch('http://localhost:9000/users' + "/" + item.id, {
+                method: "put",
+                body: JSON.stringify({title: newTitle, time: newTime}),
+                
+
+                headers: { // заголовки нашего запроса
+                    "Content-Type": "application/json"
+                }
+            })
+            .then(res => console.log(res))
 
             if (newTitle.length > 0) {
                 item.title = newTitle
@@ -110,7 +122,7 @@ function reload(arr, place) {
         let input = modal.querySelector('input');
 
         span.addEventListener('click', function () {
-            modal.style.display = 'block';
+            /* modal.style.display = 'block'; */
             input.value = this.innerHTML;
             input.addEventListener('input', function () {
                 span.innerHTML = this.value;
@@ -122,7 +134,7 @@ function reload(arr, place) {
         });
 
         input.addEventListener('change', function () {
-            modal.style.display = 'none';
+            /* modal.style.display = 'none'; */
         });
 
         if (item.isDone) {

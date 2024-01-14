@@ -205,9 +205,9 @@ input:hover {
     text-decoration: none;
 }
 
-#popup:target {
+/* #popup:target {
     display: block;
-}
+} */
 
 .link_popup {
     text-decoration: none;
@@ -275,7 +275,68 @@ input:hover {
     background-color: white;
 }
 
-.strikethrough {
+/* .strikethrough {
     color: #555;
     text-decoration: line-through;
+} */
+
+button {
+    width: 155px;
+    height: 50px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+    background: #007FFF;
+}
+
+button,
+button span {
+    transition: 200ms;
+}
+
+button .text {
+    transform: translateX(35px);
+    color: white;
+    font-weight: bold;
+    padding-right: 20px;
+}
+
+button .icon {
+    position: absolute;
+    border-left: 1px solid #c41b1b;
+    transform: translateX(110px);
+    height: 40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 172px;
+}
+
+button svg {
+    width: 15px;
+    fill: #eee;
+}
+
+button:hover {
+    background-color: rgb(109, 109, 255);
+}
+
+button:hover .text {
+    color: transparent;
+}
+
+button:hover .icon {
+    width: 150px;
+    border-left: none;
+    transform: translateX(0);
+}
+
+button:focus {
+    outline: none;
+}
+
+button:active .icon svg {
+    transform: scale(0.8);
 }
