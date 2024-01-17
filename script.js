@@ -1,6 +1,10 @@
-fetch('http://localhost:9000/users')
-    .then(res => res.json())
-    .then(res => reload(res, cont))
+// fetch('http://localhost:9000/users')
+//     .then(res => res.json())
+//     .then(res => reload(res, cont))
+
+axios.get('http://localhost:9000/users')
+    .then(res => reload(res.data, cont))
+
 
 // node js
 
@@ -26,13 +30,22 @@ form.onsubmit = (e) => { // отправляет
         return
     }
 
-    fetch('http://localhost:9000/users', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(todo)
-    })
+    // fetch('http://localhost:9000/users', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify(todo)
+    // })
+
+    axios.post('http://localhost:9000/users', todo)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+
 
     todos.push(todo)
     reload(todos, cont)
@@ -75,9 +88,13 @@ function reload(arr, place) {
 
         // functions
         remove_btn.onclick = () => {
-            fetch('http://localhost:9000/users/' + item.id, {
-                method: "delete"
-            }).then(res => res.json()).then(res => console.log(res))
+            // fetch('http://localhost:9000/users/' + item.id, {
+            //     method: "delete"
+            // }).then(res => res.json()).then(res => console.log(res))
+
+            axios.delete(`${'http://localhost:9000/users/' + item.id}`)
+                .then(res => console.log(res))
+
 
             let isSure = confirm('Are you sure ?')
 
@@ -92,18 +109,27 @@ function reload(arr, place) {
             let newTitle = prompt('Write new title ' + item.title)
             let newTime = new Date().toLocaleTimeString('uz-UZ', { hour12: false })
 
-            fetch('http://localhost:9000/users' + "/" + item.id, {
-                method: "put",
-                body: JSON.stringify({title: newTitle, time: newTime}),
-                
+            // fetch('http://localhost:9000/users' + "/" + item.id, {
+            //     method: "put",
+            //     body: JSON.stringify({ title: newTitle, time: newTime }),
 
-                headers: { // заголовки нашего запроса
-                    "Content-Type": "application/json"
-                }
+            //     headers: { // заголовки нашего запроса
+            //         "Content-Type": "application/json"
+            //     }
+            // })
+            // .then(res => console.log(res))
+
+
+            axios.patch('http://localhost:9000/users' + "/" + item.id, {
+                title: newTitle,
+                time: newTime
             })
-            .then(res => console.log(res))
+                .then(res => console.log(res))
+                .catch(error => console.log(error))
+                .finally(() => console.log('something done'))
 
-            if (newTitle.length > 0) {
+
+            if (newTitle.length) {
                 item.title = newTitle
                 title.innerHTML = newTitle
             }
